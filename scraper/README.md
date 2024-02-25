@@ -1,6 +1,6 @@
 ## Usage
 
 1. `npm install`
-2. `npm run start {your_tiendanube_url/productos}`
+2. `npm run start {your_tiendanube_url(ex.https://www.peppersarg.com)}`
 
-This currently expects a site created with tiendanube, which displays the full length of its products in a `/productos` path and has a very structured html format
+This currently expects an api for a site created with tiendanube.
