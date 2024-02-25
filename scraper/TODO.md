@@ -1,4 +1,4 @@
-- add support for shoppify sites (ex. https://vulkclothing.com)
+- add support for shoppify sites (ex. https://vulkclothing.com, https://vcp.com.ar,)
   - curl 'https://vulkclothing.com/collections/all?view=ig-ajax&page=1&paginate=250' retrieves a json like:
     {
     "page": 1,
@@ -10,3 +10,4 @@
     "products": [...]
     }
 - add way to detect page type (tiendanube, shoppify, etc)
+  - detect what https://joggers.com.ar/ is built with

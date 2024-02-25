@@ -49,9 +49,13 @@ async function addProductByPage(
   limit: number
 ): Promise<boolean> {
   console.log(`Fetching page ${page} with limit ${limit}...`);
-  const { html, has_next } = (await fetchHtml<TiendanubeProductsResponse>(
-    `${url}/productos/page/${page}/?results_only=true&limit=${limit}`
-  )) ?? { html: '', has_next: false };
+  const { html, has_next } =
+    (await fetchHtml<TiendanubeProductsResponse>(
+      `${url}/productos/page/${page}/?results_only=true&limit=${limit}`
+    )) ?? {};
+  if (!html) {
+    return false;
+  }
 
   const $ = cheerio.load(html);
   const productsDiv = $('.js-item-product');
@@ -102,7 +106,7 @@ async function addProductByPage(
   }
   allProducts = [...existingProducts, ...products];
   writeFileSync('allProducts.json', JSON.stringify(allProducts, null, 2));
-  return has_next;
+  return has_next ?? false;
 }
 
 const url = process.argv[2];
