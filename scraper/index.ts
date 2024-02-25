@@ -65,9 +65,10 @@ async function addProductByPage(
   };
   const products: Product[] = [];
   productsDiv.each((i, el) => {
-    const productInfo = JSON.parse(
-      $(el).find('script').text() || $(el).next().text() || '{}' // Sometimes the script is not in the div, but in the next one
-    );
+    let productInfoText =
+      $(el).find('script').text() || $(el).next().text() || '{}'; // Sometimes the script is not in the div, but in the next one
+    productInfoText = productInfoText.replace(/\n/g, '').replace(/\t/g, '');
+    const productInfo = JSON.parse(productInfoText);
     if (
       productInfo &&
       productInfo.offers &&
