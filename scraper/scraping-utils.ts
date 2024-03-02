@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { writeFileSync, readFileSync } from 'fs';
+import { Product, getDb, insertProduct } from './db';
 
 type TiendanubeProductsResponse = {
   html: string;
@@ -60,13 +61,6 @@ async function addProductByPage(
   const $ = cheerio.load(html);
   const productsDiv = $('.js-item-product');
 
-  type Product = {
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    url: string;
-  };
   const products: Product[] = [];
   productsDiv.each((i, el) => {
     let productInfoText =
@@ -97,14 +91,22 @@ async function addProductByPage(
     `Found ${products.length} products, from ${productsDiv.length} rows`
   );
 
-  let allProducts: Product[] = [];
-  let existingProducts: Product[] = [];
-  try {
-    existingProducts = JSON.parse(readFileSync('allProducts.json', 'utf8'));
-  } catch (error) {
-    console.log('No existing products found, created new file');
-  }
-  allProducts = [...existingProducts, ...products];
-  writeFileSync('allProducts.json', JSON.stringify(allProducts, null, 2));
+  // let allProducts: Product[] = [];
+  // let existingProducts: Product[] = [];
+  // try {
+  //   existingProducts = JSON.parse(readFileSync('allProducts.json', 'utf8'));
+  // } catch (error) {
+  //   console.log('No existing products found, created new file');
+  // }
+  // allProducts = [...existingProducts, ...products];
+  // writeFileSync('allProducts.json', JSON.stringify(allProducts, null, 2));
+  const db = await getDb();
+  products.forEach((product) => {
+    try {
+      insertProduct(db, product);
+    } catch (error) {
+      console.error('Error inserting product', product, error);
+    }
+  });
   return has_next ?? false;
 }

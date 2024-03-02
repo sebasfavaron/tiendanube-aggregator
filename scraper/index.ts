@@ -1,7 +1,8 @@
 import { readFileSync } from 'fs';
 import { scrapeByUrl } from './scraping-utils';
 
-if (process.argv[2] === '--multi') {
+console.log('Scraping', process.argv, process.argv[2]);
+if (process.argv[2] === 'multi') {
   const urls = readFileSync(process.argv[3]);
   urls
     .toString()
@@ -11,7 +12,12 @@ if (process.argv[2] === '--multi') {
         scrapeByUrl(url);
       }
     });
-} else if (process.argv[2] === '--single') {
+} else if (process.argv[2] === 'single') {
   const url = process.argv[3];
   scrapeByUrl(url);
+} else {
+  console.log(
+    'Invalid arguments, choose --multi <txt-file> or --single <url-ex.https://ecommerce.com.ar>.'
+  );
+  process.exit(1);
 }
