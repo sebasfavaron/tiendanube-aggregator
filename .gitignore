@@ -1,3 +1,4 @@
 scraper/allProducts.json
 .DS_Store
 api/node_modules/*
+api/dist/*
