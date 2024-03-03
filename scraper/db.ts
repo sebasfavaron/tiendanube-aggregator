@@ -12,18 +12,19 @@ export type Product = {
 type DatabaseType = Awaited<ReturnType<typeof open>>;
 export const getDb = async () => {
   const db = await open({
-    filename: 'database.db',
+    filename: 'databasev3.db',
     driver: Database,
   });
   db.exec(
     `CREATE TABLE IF NOT EXISTS product (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       name VARCHAR(255) NOT NULL,
       description TEXT NOT NULL,
       price REAL NOT NULL,
       image TEXT NOT NULL,
       url TEXT NOT NULL,
-      PRIMARY KEY (name, description)
-    )`
+      UNIQUE (name, description)
+  )`
   );
 
   // Insert example
@@ -89,9 +90,6 @@ export const main = async () => {
   // db.exec(`DELETE FROM product`);
   // await migrateFromJSON(db);
 
-  const allProducts = await getAllProducts(db);
-  console.log(allProducts.length);
-
   // await insertProduct(db, {
   //   name: 'Chaleco Felix Black',
   //   description: 'Cotton',
@@ -101,6 +99,9 @@ export const main = async () => {
   // });
 
   // migrateFromSqliteDb(db);
+
+  const allProducts = await getAllProducts(db);
+  console.log(allProducts.length);
 };
 
 main();
