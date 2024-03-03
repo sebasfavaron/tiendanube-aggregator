@@ -63,8 +63,8 @@ app.get(
         ];
       }
 
-      const products = await Product.find(query);
-      res.json(products);
+      const [products, total] = await Product.findAndCount(query);
+      res.json({ products, total });
     } catch (error) {
       next(error);
     }

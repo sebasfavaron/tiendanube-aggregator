@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { Product, ProductData } from './Product';
 import { InfiniteScroll } from './InfiniteScroll';
 
+type ProductsApiResponse = {
+  products: ProductData[];
+  total: number;
+};
 const fetchProducts = async (limit: number, offset: number, search = '') => {
   try {
     const response = await fetch(
@@ -9,7 +13,7 @@ const fetchProducts = async (limit: number, offset: number, search = '') => {
     );
     if (!response.ok) throw new Error('Network response was not ok');
 
-    return response.json();
+    return response.json() as Promise<ProductsApiResponse>;
   } catch (error) {
     throw new Error('Error fetching products');
   }
@@ -20,13 +24,15 @@ export const Products = () => {
   const [limit] = useState(8);
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState('');
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const loadProducts = async () => {
       const data = await fetchProducts(limit, offset, search);
       if (!data) return;
 
-      setProducts(data);
+      setTotal(data.total);
+      setProducts(data.products);
     };
     loadProducts();
   }, []);
@@ -36,7 +42,8 @@ export const Products = () => {
     const data = await fetchProducts(limit, newOffset, search);
     if (!data) return;
 
-    setProducts([...products, ...data]);
+    setTotal(data.total);
+    setProducts([...products, ...data.products]);
     setOffset(newOffset);
   };
 
@@ -45,7 +52,8 @@ export const Products = () => {
       const data = await fetchProducts(limit, offset, search);
       if (!data) return;
 
-      setProducts(data);
+      setTotal(data.total);
+      setProducts(data.products);
     };
     loadProducts();
   }, [search]);
@@ -61,8 +69,13 @@ export const Products = () => {
             onChange={(e) => setSearch(e.target.value)}
             className='border border-gray-300 rounded-md px-3 py-2 w-full'
           />
+          {total > 0 && (
+            <div className='text-gray-500 text-right mt-2'>
+              {total} products found
+            </div>
+          )}
         </div>
-        <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 min-h-[800px]'>
+        <div className='mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8 min-h-[800px]'>
           <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
             {products.map((product) => (
               <Product
