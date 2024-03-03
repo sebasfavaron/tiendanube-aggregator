@@ -49,11 +49,12 @@ app.get(
   '/products',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { limit, offset, search } = req.query;
+      const { limit, offset, search, sort, order } = req.query;
       const query = {
         skip: offset ? Number(offset) : 0,
         take: limit ? Number(limit) : 10,
         where: {},
+        order: {},
       };
 
       if (search) {
@@ -61,6 +62,10 @@ app.get(
           { name: ILike(`%${search}%`) },
           { description: ILike(`%${search}%`) },
         ];
+      }
+
+      if (sort === 'price') {
+        query.order = { price: order === 'DESC' ? 'DESC' : 'ASC' };
       }
 
       const [products, total] = await Product.findAndCount(query);
