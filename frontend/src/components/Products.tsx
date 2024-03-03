@@ -9,7 +9,7 @@ type ProductsApiResponse = {
 const fetchProducts = async (limit: number, offset: number, search = '') => {
   try {
     const response = await fetch(
-      `http://localhost:3000/products?limit=${limit}&offset=${offset}&search=${search}`
+      `http://localhost:3000/products?limit=${limit}&offset=${offset}&search=${search}&sort=price&order=ASC`
     );
     if (!response.ok) throw new Error('Network response was not ok');
 
