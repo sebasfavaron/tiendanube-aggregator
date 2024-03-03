@@ -17,13 +17,12 @@ export const getDb = async () => {
   });
   db.exec(
     `CREATE TABLE IF NOT EXISTS product (
-      id INTEGER PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       description TEXT NOT NULL,
-      price REAL,
-      image TEXT,
-      url TEXT,
-      CONSTRAINT uc_product_name_description UNIQUE (name, description)
+      price REAL NOT NULL,
+      image TEXT NOT NULL,
+      url TEXT NOT NULL,
+      PRIMARY KEY (name, description)
     )`
   );
 
@@ -38,7 +37,7 @@ export const getDb = async () => {
 
 export const insertProduct = async (db: DatabaseType, product: Product) => {
   await db.run(
-    `INSERT INTO product
+    `INSERT OR REPLACE INTO product
       (name, description, price, image, url) VALUES
       (?, ?, ?, ?, ?)`,
     [
@@ -73,12 +72,35 @@ const migrateFromJSON = async (db: DatabaseType) => {
   }
 };
 
+const migrateFromSqliteDb = async (db: DatabaseType) => {
+  const oldDb = await open({
+    filename: 'database old.db',
+    driver: Database,
+  });
+  const products = await oldDb.all(`SELECT * FROM product`);
+  console.log('Migrating', products.length, 'products');
+  for (const product of products) {
+    await insertProduct(db, product);
+  }
+};
+
 export const main = async () => {
   const db = await getDb();
   // db.exec(`DELETE FROM product`);
   // await migrateFromJSON(db);
+
   const allProducts = await getAllProducts(db);
   console.log(allProducts.length);
+
+  // await insertProduct(db, {
+  //   name: 'Chaleco Felix Black',
+  //   description: 'Cotton',
+  //   price: 100,
+  //   image: 'image1.jpg',
+  //   url: 'http://example.com/product1',
+  // });
+
+  // migrateFromSqliteDb(db);
 };
 
-// main();
+main();

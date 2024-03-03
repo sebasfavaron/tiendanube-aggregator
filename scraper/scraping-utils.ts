@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { writeFileSync, readFileSync } from 'fs';
 import { Product, getDb, insertProduct } from './db';
 
 type TiendanubeProductsResponse = {
@@ -26,7 +25,7 @@ async function fetchHtml<T>(url: string): Promise<T | null> {
     return response.data as T;
   } catch (error) {
     if (error instanceof Error) {
-      console.error('Error fetching HTML:', error.message);
+      console.error(`Error fetching HTML from ${url}: ${error.message}`);
     } else {
       console.error('Unknown error fetching HTML');
     }
@@ -38,9 +37,13 @@ export async function scrapeByUrl(url: string) {
   const limit = 100;
   let page = 1;
   let has_next = true;
-  while (has_next) {
-    has_next = await addProductByPage(url, page, limit);
-    page++;
+  try {
+    while (has_next) {
+      has_next = await addProductByPage(url, page, limit);
+      page++;
+    }
+  } catch (error) {
+    console.error('Error scraping', error, url);
   }
 }
 
@@ -49,7 +52,7 @@ async function addProductByPage(
   page: number,
   limit: number
 ): Promise<boolean> {
-  console.log(`Fetching page ${page} with limit ${limit}...`);
+  // console.log(`Fetching page ${page} with limit ${limit}...`);
   const { html, has_next } =
     (await fetchHtml<TiendanubeProductsResponse>(
       `${url}/productos/page/${page}/?results_only=true&limit=${limit}`
@@ -65,7 +68,10 @@ async function addProductByPage(
   productsDiv.each((i, el) => {
     let productInfoText =
       $(el).find('script').text() || $(el).next().text() || '{}'; // Sometimes the script is not in the div, but in the next one
-    productInfoText = productInfoText.replace(/\n/g, '').replace(/\t/g, '');
+    productInfoText = productInfoText
+      .replace(/\n/g, '')
+      .replace(/\t/g, '')
+      .replace(/\\/g, '\\\\');
     const productInfo = JSON.parse(productInfoText);
     if (
       productInfo &&
@@ -88,7 +94,9 @@ async function addProductByPage(
     }
   });
   console.log(
-    `Found ${products.length} products, from ${productsDiv.length} rows`
+    `Found ${products.length}/${productsDiv.length} products from ${
+      products[0]?.url.split('/product')[0]
+    }`
   );
 
   // let allProducts: Product[] = [];

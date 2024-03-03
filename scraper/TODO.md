@@ -10,4 +10,10 @@
     "products": [...]
     }
 - add way to detect page type (tiendanube, shoppify, etc)
-  - detect what https://joggers.com.ar/ is built with
+  - woocomerce
+    - https://oneplaceworld.com
+  - uncategorized
+    - https://www.cokles.com.ar
+    - https://joggers.com.ar
+    - https://bakari.com.ar
+    - https://motee.ar
