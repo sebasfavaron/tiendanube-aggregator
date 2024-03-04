@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 const typeorm_1 = require("typeorm");
-const models_1 = require("../api/models");
+const models_1 = require("./models");
 require("reflect-metadata");
 dotenv.config();
 const app = (0, express_1.default)();
