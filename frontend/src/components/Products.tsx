@@ -82,13 +82,13 @@ export const Products = () => {
               <div className='text-center text-gray-500'>No products found</div>
             )}
           </div>
+          {products.length > 0 && (
+            <div className={`absolute bottom-0 max-h-full h-[2880px]`}>
+              asd
+              <InfiniteScroll fetchMoreData={fetchMoreData} />
+            </div>
+          )}
         </div>
-        {products.length > 0 && (
-          <div className='absolute bottom-0 h-[50vh]'>
-            asd
-            <InfiniteScroll fetchMoreData={fetchMoreData} />
-          </div>
-        )}
       </div>
     </div>
   );
