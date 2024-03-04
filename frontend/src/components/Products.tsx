@@ -28,17 +28,6 @@ export const Products = () => {
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      const data = await fetchProducts(limit, offset, search);
-      if (!data) return;
-
-      setTotal(data.total);
-      setProducts(data.products);
-    };
-    loadProducts();
-  }, []);
-
   const fetchMoreData = async () => {
     const newOffset = offset + limit;
     const data = await fetchProducts(limit, newOffset, search);
@@ -62,7 +51,7 @@ export const Products = () => {
 
   return (
     <div>
-      <div className='bg-white rounded-md'>
+      <div className='bg-white rounded-md relative'>
         <div className='p-4'>
           <input
             type='text'
@@ -94,7 +83,12 @@ export const Products = () => {
             )}
           </div>
         </div>
-        <InfiniteScroll fetchMoreData={fetchMoreData} />
+        {products.length > 0 && (
+          <div className='absolute bottom-0 h-[50vh]'>
+            asd
+            <InfiniteScroll fetchMoreData={fetchMoreData} />
+          </div>
+        )}
       </div>
     </div>
   );
