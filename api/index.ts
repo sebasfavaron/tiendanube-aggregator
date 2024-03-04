@@ -1,11 +1,8 @@
-// server.ts
-
 import express, { Request, Response, NextFunction } from 'express';
 import * as dotenv from 'dotenv';
-import { createConnection, Connection, Like } from 'typeorm';
+import { ILike, DataSource } from 'typeorm';
 import { Product } from './models';
 import 'reflect-metadata';
-import { ILike } from 'typeorm';
 
 dotenv.config();
 
@@ -27,20 +24,21 @@ app.use((req, res, next) => {
 });
 
 // Database connection
-createConnection({
+const dataSource = new DataSource({
   type: 'sqlite',
-  database: '../scraper/database.db', // Your SQLite database file
-  entities: [Product], // Add other entities as needed
-  synchronize: true, // Auto-create tables (for development only)
-})
-  .then((connection: Connection) => {
+  database: 'database.db',
+  entities: [Product],
+  synchronize: true,
+});
+dataSource
+  .initialize()
+  .then(() => {
     console.log('Connected to SQLite database');
   })
   .catch((error: Error) => {
     console.error('Error connecting to database:', error.message);
   });
 
-// Routes
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to the Product API!');
 });
@@ -76,7 +74,6 @@ app.get(
   }
 );
 
-// Example route for creating a new product
 app.post(
   '/products',
   async (req: Request, res: Response, next: NextFunction) => {
@@ -91,8 +88,6 @@ app.post(
     }
   }
 );
-
-// Add more routes for other CRUD operations (GET, PUT, DELETE)
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

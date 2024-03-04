@@ -12,7 +12,7 @@ export type Product = {
 type DatabaseType = Awaited<ReturnType<typeof open>>;
 export const getDb = async () => {
   const db = await open({
-    filename: 'databasev3.db',
+    filename: '../api/database.db',
     driver: Database,
   });
   db.exec(
