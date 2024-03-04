@@ -76,14 +76,23 @@ app.get('/products', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         const query = {
             skip: offset ? Number(offset) : 0,
             take: limit ? Number(limit) : 10,
-            where: {},
+            where: [{}],
             order: {},
         };
         if (search) {
             query.where = [
-                { name: (0, typeorm_1.ILike)(`%${search}%`) },
-                { description: (0, typeorm_1.ILike)(`%${search}%`) },
+                {
+                    price: (0, typeorm_1.Not)(0),
+                    name: (0, typeorm_1.ILike)(`%${search}%`),
+                },
+                {
+                    price: (0, typeorm_1.Not)(0),
+                    description: (0, typeorm_1.ILike)(`%${search}%`),
+                },
             ];
+        }
+        else {
+            query.where = [{ price: (0, typeorm_1.Not)(0) }];
         }
         if (sort === 'price') {
             query.order = { price: order === 'DESC' ? 'DESC' : 'ASC' };
