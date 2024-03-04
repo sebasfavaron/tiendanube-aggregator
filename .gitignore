@@ -3,3 +3,4 @@ scraper/allProducts.json
 api/node_modules/*
 api/index.js
 api/models.js
+frontend/.env*

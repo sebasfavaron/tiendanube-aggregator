@@ -9,7 +9,9 @@ type ProductsApiResponse = {
 const fetchProducts = async (limit: number, offset: number, search = '') => {
   try {
     const response = await fetch(
-      `http://localhost:3000/products?limit=${limit}&offset=${offset}&search=${search}&sort=price&order=ASC`
+      `${
+        import.meta.env.VITE_API_URL
+      }/products?limit=${limit}&offset=${offset}&search=${search}&sort=price&order=ASC`
     );
     if (!response.ok) throw new Error('Network response was not ok');
 
