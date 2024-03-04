@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import * as dotenv from 'dotenv';
 import { ILike, DataSource } from 'typeorm';
-import { Product } from '../api/models';
+import { Product } from './models';
 import 'reflect-metadata';
 
 dotenv.config();
