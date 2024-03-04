@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import * as dotenv from 'dotenv';
-import { ILike, DataSource } from 'typeorm';
+import { ILike, DataSource, Not } from 'typeorm';
 import { Product } from './models';
 import 'reflect-metadata';
 
@@ -51,15 +51,23 @@ app.get(
       const query = {
         skip: offset ? Number(offset) : 0,
         take: limit ? Number(limit) : 10,
-        where: {},
+        where: [{}],
         order: {},
       };
 
       if (search) {
         query.where = [
-          { name: ILike(`%${search}%`) },
-          { description: ILike(`%${search}%`) },
+          {
+            price: Not(0),
+            name: ILike(`%${search}%`),
+          },
+          {
+            price: Not(0),
+            description: ILike(`%${search}%`),
+          },
         ];
+      } else {
+        query.where = [{ price: Not(0) }];
       }
 
       if (sort === 'price') {
@@ -67,6 +75,7 @@ app.get(
       }
 
       const [products, total] = await Product.findAndCount(query);
+
       res.json({ products, total });
     } catch (error) {
       next(error);
