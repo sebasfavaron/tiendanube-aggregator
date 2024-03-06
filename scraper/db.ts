@@ -10,9 +10,9 @@ export type Product = {
 };
 
 type DatabaseType = Awaited<ReturnType<typeof open>>;
-export const getDb = async () => {
+export const getDb = async (customDbName = '../api/database.db') => {
   const db = await open({
-    filename: '../api/database.db',
+    filename: customDbName,
     driver: Database,
   });
   db.exec(
@@ -27,12 +27,6 @@ export const getDb = async () => {
   )`
   );
 
-  // Insert example
-  // db.exec(
-  //   `INSERT INTO product
-  //     (name, description, price, image, url) VALUES
-  //     ("Product 5", "Description 1", 100, "image1.jpg", "http://example.com/product1")`
-  // );
   return db;
 };
 
@@ -73,32 +67,31 @@ const migrateFromJSON = async (db: DatabaseType) => {
   }
 };
 
-const migrateFromSqliteDb = async (db: DatabaseType) => {
-  const oldDb = await open({
-    filename: 'database old.db',
-    driver: Database,
-  });
-  const products = await oldDb.all(`SELECT * FROM product`);
+const migrateFromSqliteDb = async (
+  fromDb: DatabaseType,
+  toDb: DatabaseType
+) => {
+  const products = (await fromDb.all(`SELECT * FROM product`)).splice(0, 10);
   console.log('Migrating', products.length, 'products');
   for (const product of products) {
-    await insertProduct(db, product);
+    await insertProduct(toDb, product);
   }
 };
 
 export const main = async () => {
-  const db = await getDb();
-  // db.exec(`DELETE FROM product`);
+  const db = await getDb('../api/database.db');
+
   // await migrateFromJSON(db);
 
-  // await insertProduct(db, {
-  //   name: 'Chaleco Felix Black',
-  //   description: 'Cotton',
-  //   price: 100,
-  //   image: 'image1.jpg',
-  //   url: 'http://example.com/product1',
+  // const oldDb = await open({
+  //   filename: '../api/database-5207.db',
+  //   driver: Database,
   // });
+  // migrateFromSqliteDb(oldDb, db);
 
-  // migrateFromSqliteDb(db);
+  // console.log(
+  //   await db.all(`SELECT * FROM product WHERE name = ?`, ['Llavero Diamond'])
+  // );
 
   const allProducts = await getAllProducts(db);
   console.log(allProducts.length);

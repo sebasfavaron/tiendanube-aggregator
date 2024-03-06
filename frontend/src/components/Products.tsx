@@ -83,8 +83,7 @@ export const Products = () => {
             )}
           </div>
           {products.length > 0 && (
-            <div className={`absolute bottom-0 max-h-full h-[2880px]`}>
-              asd
+            <div className={`absolute bottom-0 w-8 max-h-[50%] h-[2880px]`}>
               <InfiniteScroll fetchMoreData={fetchMoreData} />
             </div>
           )}

@@ -5,18 +5,18 @@ export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   name!: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: false })
   description!: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column({ type: 'real', nullable: false })
   price!: number;
 
-  @Column()
+  @Column({ type: 'text', nullable: false })
   image!: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: false })
   url!: string;
 }

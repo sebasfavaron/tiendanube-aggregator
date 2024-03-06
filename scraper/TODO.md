@@ -17,3 +17,5 @@
     - https://joggers.com.ar
     - https://bakari.com.ar
     - https://motee.ar
+- fix scrolling loader
+- fix open on new tab
