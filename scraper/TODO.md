@@ -17,5 +17,8 @@
     - https://joggers.com.ar
     - https://bakari.com.ar
     - https://motee.ar
+    - https://verlanbrand.com
 - fix scrolling loader
+  - still gets stuck some times, would love to make it load when its visible, not just when border is visible (my assumption but i could check)
 - fix open on new tab
+- filter by brand (add url to brand name convertion to show nice names) - could be in an interactive way to "discover" your style

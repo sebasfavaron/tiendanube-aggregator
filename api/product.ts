@@ -10,9 +10,11 @@ export const getProductsWithPagination = async (
   try {
     const { limit, offset, search, sort, order } = req.query;
 
+    // filter urls that include the word 'kazuma'
     const products = await Product.query(`
       SELECT * FROM product
       WHERE price != 0
+      AND url NOT LIKE '%kazuma%'
       ${
         search
           ? `AND (name LIKE '%${search}%' OR description LIKE '%${search}%')`
@@ -30,6 +32,7 @@ export const getProductsWithPagination = async (
       await Product.query(`
     SELECT COUNT(*) FROM product
     WHERE price != 0
+    AND url NOT LIKE '%kazuma%'
     ${
       search
         ? `AND (name LIKE '%${search}%' OR description LIKE '%${search}%')`
