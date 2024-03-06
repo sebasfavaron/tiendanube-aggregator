@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Product, ProductData } from './Product';
 import { InfiniteScroll } from './InfiniteScroll';
 
@@ -27,8 +27,11 @@ export const Products = () => {
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
+  const ref = useRef<HTMLInputElement>(null);
 
   const fetchMoreData = async () => {
+    if (ref.current?.value) return; // Do not fetch data if search input is visible
+
     const newOffset = offset + limit;
     const data = await fetchProducts(limit, newOffset, search);
     if (!data) return;
@@ -54,6 +57,7 @@ export const Products = () => {
       <div className='bg-white rounded-md relative'>
         <div className='p-4'>
           <input
+            ref={ref}
             type='text'
             placeholder='Search products...'
             value={search}
@@ -83,9 +87,19 @@ export const Products = () => {
             )}
           </div>
           {products.length > 0 && (
-            <div className={`absolute bottom-0 w-8 max-h-[50%] h-[2880px]`}>
-              <InfiniteScroll fetchMoreData={fetchMoreData} />
-            </div>
+            <>
+              <div className='flex justify-center'>
+                <button
+                  onClick={fetchMoreData}
+                  className='p-3 text-white bg-[#242424] rounded-lg my-4 cursor-pointer hover:bg-opacity-90 transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity'
+                >
+                  Load more
+                </button>
+              </div>
+              <div className={`absolute bottom-0 w-8 max-h-[50%] h-[2880px]`}>
+                <InfiniteScroll fetchMoreData={fetchMoreData} />
+              </div>
+            </>
           )}
         </div>
       </div>

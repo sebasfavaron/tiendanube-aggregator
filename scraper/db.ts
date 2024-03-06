@@ -79,7 +79,7 @@ const migrateFromSqliteDb = async (
 };
 
 export const main = async () => {
-  const db = await getDb('../api/database.db');
+  const db = await getDb();
 
   // await migrateFromJSON(db);
 

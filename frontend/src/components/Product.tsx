@@ -26,10 +26,10 @@ export const Product = ({
     <div
       className='group relative'
       onClick={() => {
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'rel=noopener noreferrer');
       }}
     >
-      <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80'>
+      <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none transition duration-500 ease-in-out group-hover:opacity-75 lg:h-80'>
         <img
           src={image}
           alt={name}
