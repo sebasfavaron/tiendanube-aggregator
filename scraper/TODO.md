@@ -12,12 +12,16 @@
 - add way to detect page type (tiendanube, shoppify, etc)
   - woocomerce
     - https://oneplaceworld.com
-  - uncategorized
+    - https://verlanbrand.com
+  - empretienda
+    - https://calico.empretienda.com.ar
     - https://www.cokles.com.ar
-    - https://joggers.com.ar
     - https://bakari.com.ar
     - https://motee.ar
-    - https://verlanbrand.com
+  - billowshop
+    - https://joggers.com.ar
+  - shopify
+    - https://juanperez.com.ar
 - fix scrolling loader
   - still gets stuck some times, would love to make it load when its visible, not just when border is visible (my assumption but i could check)
 - fix open on new tab
