@@ -22,7 +22,9 @@
     - https://joggers.com.ar
   - shopify
     - https://juanperez.com.ar
+    - https://pannimargot.com
 - fix scrolling loader
   - still gets stuck some times, would love to make it load when its visible, not just when border is visible (my assumption but i could check)
 - fix open on new tab
-- filter by brand (add url to brand name convertion to show nice names) - could be in an interactive way to "discover" your style
+- filter by brand (add url to brand name convertion to show nice names) - could be in an interactive way to "discover" your style - "Que estas buscando?" y cada marca con una descripcion suya o personal de su estilo
+- fix bug where (on row with 4 products) searching and deleting the search causes the offset to be stuck higher
