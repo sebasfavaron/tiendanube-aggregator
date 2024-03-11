@@ -1,6 +1,0 @@
-scraper/allProducts.json
-.DS_Store
-api/node_modules/*
-api/index.js
-api/models.js
-frontend/.env*
